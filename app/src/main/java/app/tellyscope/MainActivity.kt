@@ -582,3 +582,4 @@ private object InDownloads {
             super.createIntent(context, input).putExtra(DocumentsCodeContract.EXTRA_INITIAL_URI, DOWNLOADS)
     }
 }
+
