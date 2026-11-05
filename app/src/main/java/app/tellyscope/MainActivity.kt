@@ -450,7 +450,6 @@ fun TellyscopeApp(vm: TellyscopeViewModel) {
                 actions = RemoteActions(
                     press = vm::press,
                     type = { text ->
-                        // تعديل دعم إرسال النصوص العربية بالكامل عبر ترميز وتوافق أفضل
                         val encoded = if (text.any { it.code > 127 }) {
                             "input text \"" + text.replace(" ", "%s") + "\""
                         } else {
@@ -579,7 +578,6 @@ private object InDownloads {
 
     class Multiple : ActivityResultContracts.OpenMultipleDocuments() {
         override fun createIntent(context: Context, input: Array<String>): Intent =
-            super.createIntent(context, input).putExtra(DocumentsCodeContract.EXTRA_INITIAL_URI, DOWNLOADS)
+            super.createIntent(context, input).putExtra(DocumentsContract.EXTRA_INITIAL_URI, DOWNLOADS)
     }
 }
-
