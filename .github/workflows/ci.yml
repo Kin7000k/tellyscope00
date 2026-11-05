@@ -1,4 +1,4 @@
-name: CI
+Name: CI
 
 on:
   pull_request:
@@ -30,6 +30,12 @@ jobs:
 
       # build = assemble (debug + release) + unit tests + Android lint
       - run: ./gradlew build --console=plain
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload reports on failure
         if: failure()
