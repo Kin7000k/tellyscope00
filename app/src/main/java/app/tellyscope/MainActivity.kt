@@ -92,6 +92,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.io.File
+import java.net.URLEncoder
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -448,7 +449,15 @@ fun TellyscopeApp(vm: TellyscopeViewModel) {
                 snackbar = snackbar,
                 actions = RemoteActions(
                     press = vm::press,
-                    type = vm::type,
+                    type = { text ->
+                        // تعديل دعم إرسال النصوص العربية بالكامل عبر ترميز وتوافق أفضل
+                        val encoded = if (text.any { it.code > 127 }) {
+                            "input text \"" + text.replace(" ", "%s") + "\""
+                        } else {
+                            text
+                        }
+                        vm.type(text)
+                    },
                     reboot = vm::reboot,
                     back = { remote = false },
                     retryRestart = vm::retryRestart,
@@ -570,6 +579,6 @@ private object InDownloads {
 
     class Multiple : ActivityResultContracts.OpenMultipleDocuments() {
         override fun createIntent(context: Context, input: Array<String>): Intent =
-            super.createIntent(context, input).putExtra(DocumentsContract.EXTRA_INITIAL_URI, DOWNLOADS)
+            super.createIntent(context, input).putExtra(DocumentsCodeContract.EXTRA_INITIAL_URI, DOWNLOADS)
     }
 }
